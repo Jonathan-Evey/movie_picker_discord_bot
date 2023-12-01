@@ -5,9 +5,13 @@ module.exports = {
     .setName("add")
     .setDescription("Adds a movie to the list")
     .addStringOption((option) =>
-      option.setName("input").setDescription("Add your movie title here")
+      option
+        .setName("input")
+        .setDescription("Add your movie title here")
+        .setRequired(true)
     ),
   async execute(interaction) {
-    await interaction.reply("Movie added!").then(console.log(interaction));
+    console.log("send data");
+    await interaction.reply({ content: "Movie added!", ephemeral: true });
   },
 };
