@@ -1,12 +1,6 @@
 const { SlashCommandBuilder } = require("discord.js");
 const mongoose = require("mongoose");
-
-const Schema = mongoose.Schema;
-const MovieSchema = new Schema({
-  movie_title: String,
-  user_id: { type: Number, ref: "UserID" },
-  server_id: { type: Number, ref: "ServerID" },
-});
+const MovieSchema = require("../../schema/MovieSchema.js");
 
 mongoose.set("strictQuery", false);
 
@@ -40,7 +34,8 @@ module.exports = {
         .setRequired(true)
     ),
   async execute(interaction) {
-    const Movie = mongoose.model("Movie", MovieSchema);
+    mongoose.models = {};
+    let MovieList = mongoose.model("Movie", MovieSchema);
     //console.log(interaction);
     let serverId = interaction.member.guild.id;
     //console.log(serverId);
@@ -48,14 +43,14 @@ module.exports = {
     //console.log(userId);
     let movieTitle = interaction.options.get("title");
     //console.log(movieTitle);
-    let isMovie = await checkForMovie(Movie, movieTitle.value);
+    let isMovie = await checkForMovie(MovieList, movieTitle.value);
     if (isMovie) {
       interaction.reply({
         content: `${movieTitle.value} is already added!`,
         ephemeral: true,
       });
     } else {
-      await saveMovie(Movie, movieTitle.value, userId, serverId);
+      await saveMovie(MovieList, movieTitle.value, userId, serverId);
       interaction.reply({
         content: `${movieTitle.value} added!`,
         ephemeral: true,
