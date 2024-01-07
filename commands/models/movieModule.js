@@ -44,4 +44,26 @@ const findUserMovieList = async (id) => {
   }
 };
 
-module.exports = { saveMovie, checkForMovie, pickMovie, findUserMovieList };
+/// --- watched function
+const watchedList = async () => {
+  let moviesWatched = await Movies.find({ watched: true });
+  if (moviesWatched) {
+    let movieCount = 0;
+    let movieList = "";
+    moviesWatched.forEach((movie) => {
+      movieList = movieList + `${movie.toObject()["movie_title"]}\n`;
+      movieCount = movieCount + 1;
+    });
+    return `This server has watched ${movieCount} movies\n${movieList}`;
+  } else {
+    ("This server has yet to watch a movie on the list.");
+  }
+};
+
+module.exports = {
+  saveMovie,
+  checkForMovie,
+  pickMovie,
+  findUserMovieList,
+  watchedList,
+};
