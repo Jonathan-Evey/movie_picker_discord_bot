@@ -10,7 +10,7 @@ module.exports = {
   async execute(interaction) {
     let userId = interaction.user.id;
     await interaction.reply({
-      content: `Making movie selection...`,
+      content: `Finding your movie list...`,
       ephemeral: true,
     });
     let userList = await findUserMovieList(Number(userId));
