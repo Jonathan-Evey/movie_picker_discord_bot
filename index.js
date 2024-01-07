@@ -4,6 +4,16 @@ const { Client, Collection, Events, GatewayIntentBits } = require("discord.js");
 const { token, MONGODB_URL } = require("./config.json");
 const mongoose = require("mongoose");
 
+mongoose.set("strictQuery", false);
+
+const mongoDB = MONGODB_URL;
+mongoose.connect(mongoDB, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "MongoDB connection error:"));
+
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -37,16 +47,6 @@ for (const folder of commandFolders) {
 client.once(Events.ClientReady, (readyClient) => {
   console.log(`Ready! Logged in as ${readyClient.user.tag}`);
 });
-
-mongoose.set("strictQuery", false);
-
-const mongoDB = MONGODB_URL;
-mongoose.connect(mongoDB, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 client.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
