@@ -6,6 +6,7 @@ const MovieSchema = new Schema({
   user_id: { type: Number, ref: "UserID" },
   user_name: String,
   server_id: { type: Number, ref: "ServerID" },
+  watched: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model("Movie", MovieSchema);
