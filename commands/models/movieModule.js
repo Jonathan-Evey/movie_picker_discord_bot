@@ -24,9 +24,15 @@ const pickMovie = async () => {
   let movieList = await Movies.find({});
   if (movieList) {
     let pickIndexNumber = Math.floor(Math.random() * movieList.length);
-    selectedMovie = movieList[pickIndexNumber].toObject()["movie_title"];
-    movieAddedBy = movieList[pickIndexNumber].toObject()["user_name"];
-    return `${selectedMovie}\nMovie was added by ${movieAddedBy}`;
+    selectedMovie = movieList[pickIndexNumber].toObject();
+    selectedMovie.watched = true;
+    movieTitle = selectedMovie["movie_title"];
+    movieAddedBy = selectedMovie["user_name"];
+    const movie = await Movies.findOne({ movie_title: movieTitle });
+    movie.watched = true;
+    await movie.save();
+
+    return `"${movieTitle}" - added by ${movieAddedBy}`;
   }
 };
 
@@ -54,7 +60,11 @@ const watchedList = async () => {
       movieList = movieList + `${movie.toObject()["movie_title"]}\n`;
       movieCount = movieCount + 1;
     });
-    return `This server has watched ${movieCount} movies\n${movieList}`;
+    if (movieCount > 1) {
+      return `This server has watched ${movieCount} movies\n${movieList}`;
+    } else {
+      return `This server has watched ${movieCount} movie\n${movieList}`;
+    }
   } else {
     ("This server has yet to watch a movie on the list.");
   }
