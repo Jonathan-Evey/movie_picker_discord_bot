@@ -62,16 +62,32 @@ const findUserMovieList = async (id) => {
 const watchedList = async () => {
 	let moviesWatched = await Movies.find({ watched: true });
 	if (moviesWatched) {
-		let movieCount = 0;
-		let movieList = "";
+		let movieArray = [];
+		let numberTitleArray = [];
+		let letterTitleArray = [];
 		moviesWatched.forEach((movie) => {
-			movieList = movieList + `${movie.toObject()["movie_title"]}\n`;
-			movieCount = movieCount + 1;
+			movieArray.push(movie.toObject());
 		});
-		if (movieCount > 1) {
-			return `This server has watched ${movieCount} movies\n${movieList}`;
+		movieArray.sort((a, b) => {
+			return a.movie_title > b.movie_title ? 1 : -1;
+		});
+		movieArray.forEach((movie) => {
+			if (movie.movie_title[0].match(/[0-9]/)) {
+				numberTitleArray.push(movie);
+			} else {
+				letterTitleArray.push(movie);
+			}
+		});
+		let finalArray = [...letterTitleArray, ...numberTitleArray];
+		let movieList = "";
+		finalArray.forEach((movie) => {
+			movieList =
+				movieList + `${movie.movie_title} - added by ${movie.user_name}\n`;
+		});
+		if (finalArray.length > 1) {
+			return `This server has watched ${finalArray.length} movies\n${movieList}`;
 		} else {
-			return `This server has watched ${movieCount} movie\n${movieList}`;
+			return `This server has watched ${finalArray.length} movie\n${movieList}`;
 		}
 	} else {
 		("This server has yet to watch a movie on the list.");
