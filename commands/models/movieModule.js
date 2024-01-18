@@ -12,7 +12,10 @@ const saveMovie = async (movieTitle, userId, userName, serverId) => {
 };
 /// ---- add function
 const checkForMovie = async (movieTitle) => {
-	let movieFound = await Movies.findOne({ movie_title: movieTitle });
+	let movieFound = await Movies.findOne({
+		movie_title: movieTitle,
+		watched: false,
+	});
 	if (movieFound) {
 		return true;
 	} else {
@@ -67,7 +70,7 @@ const findUserMovieList = async (id) => {
 		}
 		return `Movies you have on the server list:\n${movieArray.join(
 			"\n"
-		)}\nMovies you added to the list that have been watched by the server:\n${watchedMovieArray.join(
+		)}\n\nMovies you added to the list that have been watched by the server:\n${watchedMovieArray.join(
 			"\n"
 		)}`;
 	} else {
