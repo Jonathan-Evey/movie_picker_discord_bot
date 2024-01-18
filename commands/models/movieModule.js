@@ -48,11 +48,28 @@ const updateMovieToWatched = async (title) => {
 const findUserMovieList = async (id) => {
 	let moviesFound = await Movies.find({ user_id: id });
 	if (moviesFound) {
-		let movieList = "";
+		let movieArray = [];
+		let watchedMovieArray = [];
 		moviesFound.forEach((movie) => {
-			movieList = movieList + `${movie.toObject()["movie_title"]}\n`;
+			if (movie.toObject().watched === false) {
+				movieArray.push(movie.toObject()["movie_title"]);
+			} else {
+				watchedMovieArray.push(movie.toObject()["movie_title"]);
+			}
 		});
-		return movieList;
+		if (movieArray.length === 0) {
+			return `You have no movies added on the server list. Use /add to add a movie.\n\nMovies you added to the list that have been watched by the server:\n${watchedMovieArray.join(
+				"\n"
+			)}`;
+		}
+		if (watchedMovieArray.length === 0) {
+			return `Movies you have on the server list:\n${movieArray.join("\n")}`;
+		}
+		return `Movies you have on the server list:\n${movieArray.join(
+			"\n"
+		)}\nMovies you added to the list that have been watched by the server:\n${watchedMovieArray.join(
+			"\n"
+		)}`;
 	} else {
 		return "You have no movies added on the server list.";
 	}
