@@ -2,14 +2,14 @@
 
 updates wanted
 
-for /add
-if the movie is already been watched, it can be added again
-formate movie titles to be capitalized
-
 add /remove command
 function to remove movie added by user that is still unwatched
 
 //////////---- Done ----///////////
+
+for /add
+if the movie is already been watched, it can be added again
+formate movie titles to be capitalized
 
 for /list
 update reply to show list of watched and unwatched.
