@@ -34,7 +34,7 @@ module.exports = {
 
 			try {
 				const confirmation = await response.awaitMessageComponent({
-					time: 60_000,
+					time: 300_000,
 				});
 				if (confirmation.customId === "yesButton") {
 					await updateMovieToWatched(selectedMovie.title);
