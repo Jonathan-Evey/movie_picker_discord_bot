@@ -22,6 +22,12 @@ module.exports = {
 					.setValue(movie.movie_title);
 				menuOptionsArray.push(movieOption);
 			});
+			let cancelOption = new StringSelectMenuOptionBuilder()
+				.setLabel("Cancel")
+				.setDescription("Cancel /remove command")
+				.setValue("Cancel /remove");
+
+			menuOptionsArray.push(cancelOption);
 			const selectionMenu = new StringSelectMenuBuilder()
 				.setCustomId("removeMovie")
 				.setPlaceholder("Select movie you want to remove")
@@ -39,18 +45,25 @@ module.exports = {
 					time: 300_000,
 				});
 				if (confirmation) {
-					let userId = confirmation.user.id;
-					let movieTitle = confirmation.values[0];
-					await removeMovie(userId, movieTitle);
-					await interaction.editReply({
-						content: `${movieTitle} has been removed from the servers list of movies.`,
-						components: [],
-					});
+					if (confirmation.values[0] === "Cancel /remove") {
+						await interaction.editReply({
+							content: `/remove has been cancelled`,
+							components: [],
+						});
+					} else {
+						let userId = confirmation.user.id;
+						let movieTitle = confirmation.values[0];
+						await removeMovie(userId, movieTitle);
+						await interaction.editReply({
+							content: `${movieTitle} has been removed from the servers list of movies.`,
+							components: [],
+						});
+					}
 				}
 			} catch (error) {
 				await interaction.editReply({
 					content:
-						"Confirmation not received within 5 minutes, please call /pick again to pick a new movie.",
+						"Confirmation was not received within 5 minutes, please use /remove again to remove a movie.",
 					components: [],
 				});
 			}
