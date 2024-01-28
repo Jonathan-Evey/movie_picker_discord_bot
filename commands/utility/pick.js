@@ -45,14 +45,14 @@ module.exports = {
 				} else if (confirmation.customId === "noButton") {
 					await interaction.editReply({
 						content:
-							"Movie has been put back on the list, please us /pick to pick a new movie.",
+							"Movie has been put back on the list, please use /pick to pick a new movie.",
 						components: [],
 					});
 				}
 			} catch (error) {
 				await interaction.editReply({
 					content:
-						"Confirmation not received within 5 minutes, please call /pick again to pick a new movie.",
+						"Confirmation was not received within 5 minutes, please use /pick again to pick a new movie.",
 					components: [],
 				});
 			}
