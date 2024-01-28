@@ -114,6 +114,27 @@ const watchedList = async () => {
 	}
 };
 
+//----- remove function
+const userMoviesOnList = async (userId) => {
+	let moviesFound = await Movies.find({ user_id: userId, watched: false });
+	let movieArray = [];
+	if (moviesFound) {
+		moviesFound.forEach((movie) => {
+			movieArray.push(movie.toObject());
+		});
+	}
+	return movieArray;
+};
+
+//----- remove function
+const removeMovie = async (userId, title) => {
+	return Movies.findOneAndDelete({
+		user_id: userId,
+		movie_title: title,
+		watched: false,
+	});
+};
+
 module.exports = {
 	saveMovie,
 	checkForMovie,
@@ -121,4 +142,6 @@ module.exports = {
 	updateMovieToWatched,
 	findUserMovieList,
 	watchedList,
+	userMoviesOnList,
+	removeMovie,
 };
